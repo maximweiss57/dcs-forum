@@ -1,0 +1,6 @@
+.navbar-brand{
+    font-size: 40px;
+    color: #d1b132 !important;
+  }
+.nav-link.active{font-size: 24;
+    color:#17305c !important}  
