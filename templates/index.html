@@ -1,67 +1,53 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>PreFlight israeli DCS community</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-  <link rel="stylesheet" href="../static/index.css">
-  <link rel="icon" href="../static/logo" type="image/x-icon">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PreFlight</title>
+    <link rel="stylesheet" href="../static/styles.css">
+    <link rel="icon" href="../static/logo">
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-lg bg-body-tertiary">
-    <img class="logo" src="/static/logo" alt="Preflight logo">
-    <div class="container-fluid">
-      <m class="navbar-brand" type="button" href="/templates/index.html">PreFlight</m>
-      <a class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav">
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="squadrons.html">Squadrons</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active" href="Forums.html">Forums</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active" href="events.html">Events</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active" href="downloads.html">Downloads</a>
-            </li>
-          </ul>
-          <div>
-            <form class="d-flex" role="search">
-              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-              <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
-          </div>
-          <button id="log" href="login.html" type="button" class="btn btn-primary">Login</button>
-          <button id="reg" href="register.html" type="button" class="btn btn-outline-primary">Register</button>
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="logo">
+            <!-- Place your logo here -->
+            <img src="../static/logo" alt="Forum Logo" class="rounded-circle">
         </div>
-  </nav>
-  <iframe id="mainvid" width="560" height="315" src="https://www.youtube.com/embed/952-UT2aHak"
-    title="YouTube video player" frameborder="0"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-    allowfullscreen>
-  </iframe>
-  <div>
-    <h1></h1>
-  </div>
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
-    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
-    crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js"
-    integrity="sha384-Rx+T1VzGupg4BHQYs2gCW9It+akI2MM/mndMCy36UVfodzcJcF0GGLxZIzObiEfa"
-    crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
-    crossorigin="anonymous"></script>
+        <ul class="nav-links float-left">
+            <li><a href="index.html">PreFlight</a></li>
+            <li><a href="squadrons.html">Squadrons</a></li>
+            <li><a href="Forums.html">Forums</a></li>
+            <li><a href="events.html">Events</a></li>
+            <li><a href="downloads.html">Downloads</a></li>
+            <li class="search-bar">
+                <input type="text" placeholder="Search...">
+                <button type="submit">Search</button>
+            </li>
+        </ul>
+        <div class="user-actions">
+            <!-- Register and Login buttons -->
+            <button onclick="window.location.href='#register'">Register</button>
+            <button onclick="location.href = '/login';">Login</button>
+        </div>
+    </nav>
+
+    <!-- About Us and Video Section -->
+    <section class="row">
+        <section id="about-us" class="col-md-6">
+            <h2>About Us</h2>
+            <p>
+                The Preflight community on the us.preflight website was founded in 2004 by Micah, Alon, Ohad, and Roi. For many years, the community has been the leading Israeli portal for gaming in combat flight simulators for PC computers. The community brings together the Israeli community in a number of combat flight simulators, the main ones being DCS, Falcon, and 1IL, and it serves as an online meeting point for members who engage in multiplayer flight activities in these simulators.
+            </p>
+        </section>
+        <section id="video" class="col-md-6 float-right">
+            <h2>Featured Video</h2>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/952-UT2aHak" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </section>
+    </section>
+
 </body>
 
 </html>
