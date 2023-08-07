@@ -13,11 +13,10 @@
     <!-- Navigation Bar -->
     <nav>
         <div class="logo">
-            <!-- Place your logo here -->
             <img src="../static/logo" alt="Forum Logo" class="rounded-circle">
         </div>
-        <ul class="nav-links float-left">
-            <li><a href="index.html">PreFlight</a></li>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
             <li><a href="squadrons.html">Squadrons</a></li>
             <li><a href="forums.html">Forums</a></li>
             <li><a href="events.html">Events</a></li>
@@ -28,23 +27,25 @@
             </li>
         </ul>
         <div class="user-actions">
-            <!-- Register and Login buttons -->
             <button onclick="window.location.href='#register';">Register</button>
             <button onclick="location.href = '/login';">Login</button>
         </div>
     </nav>
 
     <!-- About Us and Video Section -->
-    <section class="row">
-        <section id="about-us" class="col-md-6">
+    <section class="about-video-container">
+        <section id="about-us" class="about-us-section">
             <h2>About Us</h2>
             <p>
-                The Preflight community on the us.preflight website was founded in 2004 by Micah, Alon, Ohad, and Roi. For many years, the community has been the leading Israeli portal for gaming in combat flight simulators for PC computers. The community brings together the Israeli community in a number of combat flight simulators, the main ones being DCS, Falcon, and 1IL, and it serves as an online meeting point for members who engage in multiplayer flight activities in these simulators.
+                The PreFlight community on the us.preflight website was founded in 2004 by Micah, Alon, Ohad, and Roi. For many years, the community has been the leading Israeli portal for gaming in combat flight simulators for PC computers. The community brings together the Israeli community in a number of combat flight simulators, the main ones being DCS, Falcon, and 1IL, and it serves as an online meeting point for members who engage in multiplayer flight activities in these simulators.
             </p>
         </section>
-        <section id="video" class="col-md-6 float-right">
-            <h2>Featured Video</h2>
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/952-UT2aHak" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        <section id="video" class="featured-video-section">
+            <div class="video-container">
+                <div class="video-wrapper">
+                    <iframe width="280" height="157.5" src="https://www.youtube.com/embed/952-UT2aHak" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </div>
+            </div>
         </section>
     </section>
 
