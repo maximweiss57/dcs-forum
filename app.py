@@ -23,3 +23,7 @@ def do_login():
         return redirect('/')
     else:
         return render_template('login.html', error='Invalid username or password.')
+
+@app.route('/register')
+def register():
+    return render_template('register.html')
