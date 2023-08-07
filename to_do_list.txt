@@ -1,0 +1,6 @@
+home page V 
+login page V 
+connect data base & make register and login options 
+make squadrons page 
+make squadron template 
+make create squadron option 
