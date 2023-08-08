@@ -1,6 +1,30 @@
 from flask import Flask, render_template, request, redirect
+from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 
 app = Flask(__name__)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///dcs-forum.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SECRET_KEY']='dcs-forum'
+db = SQLAlchemy(app)
+
+class Users(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    password = db.Column(db.String(120), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+   
+with app.app_context():
+    db.create_all()
+
+    def __repr__(self):
+        return '<Users %r>' % self.id
+
+
+
 
 @app.route('/')
 def index():
@@ -14,16 +38,20 @@ def index2():
 def login():
     return render_template('login.html')
 
-@app.route('/login', methods=['POST'])
-def do_login():
-    username = request.form['username']
-    password = request.form['password']
-
-    if username == 'admin' and password == 'password':
-        return redirect('/')
-    else:
-        return render_template('login.html', error='Invalid username or password.')
-
-@app.route('/register')
+@app.route('/register',methods=['POST','GET'])
 def register():
-    return render_template('register.html')
+    if request.method == 'POST':
+        username = request.form['username']
+        email = request.form['email']
+        password = request.form['password']
+        user = Users(username=username, email=email, password=password)
+        try:
+            db.session.add(user)
+            db.session.commit()
+        except:
+            return 'There was an issue with registration proccess'
+        return redirect('/login')
+    else:
+        return render_template('register.html')
+
+
