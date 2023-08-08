@@ -1,0 +1,47 @@
+<!-- base_template.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Title{% endblock %}</title>
+    <link rel="stylesheet" href="../static/styles.css">
+    <link rel="icon" href="../static/logo">
+</head>
+
+<body>
+    <body class="background-image" style="background-image:url(../static/back1);"></body>
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="logo">
+            <!-- Place your logo here -->
+            <a href="{{ url_for('index') }}">
+                <img src="../static/logo" alt="Forum Logo" class="rounded-circle">
+            </a>
+        </div>
+        <ul class="nav-links float-left">
+            <li><a href="{{ url_for('index') }}">PreFlight</a></li>
+            <li><a href="{{ url_for('squadrons') }}">Squadrons</a></li>
+            <li><a href="{{ url_for('forums') }}">Forums</a></li>
+            <li><a href="{{ url_for('events') }}">Events</a></li>
+            <li><a href="{{ url_for('downloads') }}">Downloads</a></li>
+            <li class="search-bar">
+                <input type="text" placeholder="Search...">
+                <button type="submit">Search</button>
+            </li>
+        </ul>
+        <div class="user-actions">
+            <!-- Register and Login buttons -->
+            <button onclick="window.location.href='/register';">Register</button>
+            <button onclick="location.href = '/login';">Login</button>
+        </div>
+    </nav>
+    
+    {% block content %}
+    <!-- Content of the specific page will go here -->
+    {% endblock %}
+
+</body>
+
+</html>

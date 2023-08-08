@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
@@ -22,9 +22,6 @@ with app.app_context():
 
     def __repr__(self):
         return '<Users %r>' % self.id
-
-
-
 
 @app.route('/')
 def index():
@@ -53,5 +50,17 @@ def register():
         return redirect('/login')
     else:
         return render_template('register.html')
-
+    
+@app.route('/forums')
+def forums():
+    return render_template('forums.html')
+@app.route('/downloads')
+def downloads():
+    return render_template('downloads.html')
+@app.route('/events')
+def events():
+    return render_template('events.html')
+@app.route('/squadrons')
+def squadrons():
+    return render_template('squadrons.html')
 
