@@ -1,53 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PreFlight Login</title>
-    <link rel="stylesheet" href="../static/styles.css">
-    <link rel="icon" href="../static/logo">
-</head>
+{% block title %}PreFlight Login{% endblock %}
 
-<body>
-    <body class="background-image" style="background-image: url('../static/back1');"></body>
-    <!-- Navigation Bar -->
-    <nav>
-        <div class="logo">
-            <!-- Place your logo here -->
-            <a href="index.html">
-                <img src="../static/logo" alt="Forum Logo" class="rounded-circle">
-            </a>
-        </div>
-        <ul class="nav-links float-left">
-            <li id="preflight"><a href="index.html">PreFlight</a></li>
-            <li><a href="squadrons.html">Squadrons</a></li>
-            <li><a href="Forums.html">Forums</a></li>
-            <li><a href="events.html">Events</a></li>
-            <li><a href="downloads.html">Downloads</a></li>
-            <li class="search-bar">
-                <input type="text" placeholder="Search...">
-                <button type="submit">Search</button>
-            </li>
-        </ul>
-        <div class="user-actions">
-            <!-- Register and Login buttons -->
-            <button onclick="window.location.href='/register';">Register</button>
-            <button onclick="location.href = '/login';">Login</button>
-        </div>
-    </nav>
-
-    <!-- Login Section -->
-    <section id="login" class="container">
-        <h2>Login</h2>
-        <form class="form" action="/login" method="post">
-            <input type="text" name="username" class="input-field" placeholder="Username" >
-            <input type="password" name="password" class="input-field" placeholder="Password">
-            <input type="submit" value="Login" class="login-button">
-        </form>
-    </section>
-
-</body>
-
-
-</html>
+{% block content %}
+<!-- Login Section -->
+<section id="login" class="container">
+    <h2>Login</h2>
+    <form class="form" action="/login" method="post">
+        <input type="text" name="username" class="input-field" placeholder="Username">
+        <input type="password" name="password" class="input-field" placeholder="Password">
+        <input type="submit" value="Login" class="login-button">
+    </form>
+</section>
+{% endblock %}

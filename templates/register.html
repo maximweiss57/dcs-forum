@@ -1,56 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PreFlight Register</title>
-    <link rel="stylesheet" href="../static/styles.css">
-    <link rel="icon" href="../static/logo">
-</head>
+{% block title %}PreFlight Register{% endblock %}
 
-<body>
-    <body class="background-image" style="background-image: url('../static/back1');"></body>
-    <!-- Navigation Bar -->
-    <nav>
-        <div class="logo">
-            <!-- Place your logo here -->
-            <a href="index.html">
-                <img src="../static/logo" alt="Forum Logo" class="rounded-circle">
-            </a>
-              
-        </div>
-        <ul class="nav-links float-left">
-            <li id="preflight"><a href="index.html">PreFlight</a></li>
-            <li><a href="squadrons.html">Squadrons</a></li>
-            <li><a href="Forums.html">Forums</a></li>
-            <li><a href="events.html">Events</a></li>
-            <li><a href="downloads.html">Downloads</a></li>
-            <li class="search-bar">
-                <input type="text" placeholder="Search...">
-                <button type="submit">Search</button>
-            </li>
-        </ul>
-        <div class="user-actions">
-            <!-- Register and Login buttons -->
-            <button id="register-button" onclick="window.location.href='#register'">Register</button>
-            <button onclick="location.href = '/login';">Login</button>
-        </div>
-    </nav>
-
-    <!-- Register Section -->
-    <section id="register" class="container">
-        <h2">Register</h2>
-        <form class="form" action="/register" method="post">
-            <input type="text" name="username" class="input-field" placeholder="Username" style="display: flex; align-items: center;">
-            <input type="email" name="email" class="input-field" placeholder="Email" style="display: flex; align-items: center;">
-            <input type="password" name="password" class="input-field" placeholder="Password" style="display: flex; align-items: center;">
-            <input type="password" name="confirm_password" class="input-field" placeholder="Confirm Password" style="display: flex; align-items: center;">
-            <input type="submit" value="Register" class="login-button">
-        </form>
-    </section>
-
-</body>
-
-
-</html>
+{% block content %}
+<!-- Register Section -->
+<section id="register" class="container">
+    <h2">Register</h2>
+    <form class="form" action="/register" method="post">
+        <input type="text" name="username" class="input-field" placeholder="Username" style="display: flex; align-items: center;">
+        <input type="email" name="email" class="input-field" placeholder="Email" style="display: flex; align-items: center;">
+        <input type="password" name="password" class="input-field" placeholder="Password" style="display: flex; align-items: center;">
+        <input type="password" name="confirm_password" class="input-field" placeholder="Confirm Password" style="display: flex; align-items: center;">
+        <input type="submit" value="Register" class="login-button">
+    </form>
+</section>
+{% endblock %}

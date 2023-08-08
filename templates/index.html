@@ -1,63 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PreFlight</title>
-    <link rel="stylesheet" href="../static/styles.css">
-    <link rel="icon" href="../static/logo">
-</head>
+{% block title %}PreFlight{% endblock %}
 
-<body>
-    <body class="background-image" style="background-image:url(../static/back1);"></body>
-    <!-- Navigation Bar -->
-    <nav>
-        <div class="logo">
-            <!-- Place your logo here -->
-            <a href="index.html">
-                <img src="../static/logo" alt="Forum Logo" class="rounded-circle">
-            </a>
-        </div>
-        <ul class="nav-links float-left">
-            <li><a href="index.html">PreFlight</a></li>
-            <li><a href="squadrons.html">Squadrons</a></li>
-            <li><a href="forums.html">Forums</a></li>
-            <li><a href="events.html">Events</a></li>
-            <li><a href="downloads.html">Downloads</a></li>
-            <li class="search-bar">
-                <input type="text" placeholder="Search...">
-                <button type="submit">Search</button>
-            </li>
-        </ul>
-        <div class="user-actions">
-            <!-- Register and Login buttons -->
-            <button onclick="window.location.href='/register';">Register</button>
-            <button onclick="location.href = '/login';">Login</button>
-        </div>
-    </nav>
-
-    <!-- About Us and Video Section -->
-    <section class="row">
-        <section id="about-us" class="col-md-6">
-            <h2>About Us</h2>
-            <p>
-                The Preflight community on the us.preflight website was founded in 2004 by Micah, Alon, Ohad, and Roi. For many years, 
-                the community has been the leading Israeli portal for gaming in combat flight simulators for PC computers. The community brings 
-                together the Israeli community in a number of combat flight simulators, the main ones being DCS, Falcon, and 1IL, and it serves 
-                as an online meeting point for members who engage in multiplayer flight activities in these simulators.
-            </p><br/><hr><br/>
-            <iframe height="100%" width="100%" src="https://www.youtube.com/embed/952-UT2aHak" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-        </section>
-        
+{% block content %}
+<!-- About Us and Video Section -->
+<section class="row">
+    <section id="about-us" class="col-md-6">
+        <h2>About Us</h2>
+        <p>
+            The Preflight community on the us.preflight website was founded in 2004 by Micah, Alon, Ohad, and Roi. For many years, 
+            the community has been the leading Israeli portal for gaming in combat flight simulators for PC computers. The community brings 
+            together the Israeli community in a number of combat flight simulators, the main ones being DCS, Falcon, and 1IL, and it serves 
+            as an online meeting point for members who engage in multiplayer flight activities in these simulators.
+        </p><br/><hr><br/>
+        <iframe height="500px" width="100%" src="https://www.youtube.com/embed/952-UT2aHak" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
     </section>
-    
-
-    <!-- Footer -->
-    <footer>
-        <p>Copyright &copy; 2004-2023 PreFlight Community</p>
-    </footer>
-
-</body>
-
-</html>
+</section>
+{% endblock %}
