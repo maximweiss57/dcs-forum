@@ -31,17 +31,20 @@
                 <button type="submit">Search</button>
             </li>
         </ul>
+        {% if current_user.is_authenticated %}
+        <div class="user-actions">
+            <!-- Logout button -->
+            <button onclick="location.href = '/logout';">Logout</button>
+        </div>
+        {% else %}
         <div class="user-actions">
             <!-- Register and Login buttons -->
             <button onclick="window.location.href='/register';">Register</button>
             <button onclick="location.href = '/login';">Login</button>
         </div>
+        {% endif %}
     </nav>
     
     {% block content %}
     <!-- Content of the specific page will go here -->
     {% endblock %}
-
-</body>
-
-</html>
