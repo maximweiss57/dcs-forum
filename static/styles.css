@@ -16,7 +16,7 @@ nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px;
+    padding: 5px;
 }
 
 .logo img {
@@ -36,7 +36,7 @@ nav {
 .nav-links li {
     margin-left: 20px;
     padding: 8px; /* Padding to increase spacing between links */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle box shadow for visual separation */
+    box-shadow: 0 2px 4px rgba(150, 19, 19, 0.1); /* Subtle box shadow for visual separation */
 }
 
 .nav-links li a {
@@ -44,14 +44,24 @@ nav {
     text-decoration: none;
     font-size: 16px;
     font-family: Arial, sans-serif; /* Change the font family for a more modern look */
-    transition: color 0.2s; /* Slightly faster transition for smoother effects */
+    transition: color 0.2s; /* Slightly faster transition for smoother effects */;
 }
 
 .nav-links li a:hover {
     color: #66c0f4;
     background-color: #444; /* Change the background color on hover to provide visual feedback */
 }
-
+#mainpage{
+    font-size: 18px;
+    font-weight: bold;
+    color: #66c0f4;
+}
+#CreateSquadron{
+    
+    font-size: 24px;
+    font-weight: bold;
+    color: #66c0f4;
+}
 .search-bar input[type="text"] {
     padding: 5px 10px;
     border: none;
@@ -199,4 +209,79 @@ nav {
     background-position: center center;
     background-size: cover;
     backdrop-filter: blur(5px);
+}
+
+/* Styling for Create Squadron Page */
+
+.page-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f7f7f7;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+form {
+    display: grid;
+    gap: 15px;
+}
+
+label {
+    font-weight: bold;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="date"],
+textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+textarea {
+    resize: vertical;
+}
+
+button[type="submit"] {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.2s;
+}
+
+button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+/* Style for form fields when they are required but not filled */
+input:required:invalid,
+textarea:required:invalid {
+    border-color: #ff7777;
+}
+
+/* Placeholder color for input fields */
+input::placeholder,
+textarea::placeholder {
+    color: #999;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .page-content {
+        padding: 15px;
+    }
 }
