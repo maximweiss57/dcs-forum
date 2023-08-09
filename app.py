@@ -19,6 +19,16 @@ class Users(db.Model, UserMixin):
     password = db.Column(db.String(120), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
 
+class Squadrons(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(80), unique=True, nullable=False)
+    description = db.Column(db.Text(500), nullable=False)
+    members = db.Column(db.Integer, nullable=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+
+with app.app_context():
+    db.create_all() 
+
 @login_manager.user_loader
 def load_user(user_id):
     return Users.query.get(int(user_id))
@@ -82,7 +92,27 @@ def downloads():
 def events():
     return render_template('events.html', current_user=current_user)
 
-@app.route('/squadrons')
+@app.route('/squadrons',methods=['POST','GET'])
 def squadrons():
-    return render_template('squadrons.html', current_user=current_user)
+    squadrons = Squadrons.query.order_by(Squadrons.created_at).all()
+    return render_template('squadrons.html',squadrons=squadrons, current_user=current_user)
+from datetime import datetime
+from flask import redirect
+
+@app.route('/squadrons_reg', methods=['POST', 'GET'])
+def squadrons_reg():
+    if request.method == 'POST':
+        name = request.form['name']
+        description = request.form['description']
+        members = request.form['members']  # Get active members from the form
+        created_at = datetime.utcnow()
+        squadron = Squadrons(name=name, description=description, members=members, created_at=created_at)
+        try:
+            db.session.add(squadron)
+            db.session.commit()
+        except:
+            return 'There was an issue with the registration process'
+        return redirect('/squadrons')  # Redirect to the squadrons page after submission
+    else:
+        return render_template('squadrons_reg.html')
 

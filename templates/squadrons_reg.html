@@ -1,0 +1,26 @@
+<!-- create_squadron.html -->
+{% extends "base.html" %}
+
+{% block title %}Create Squadron - PreFlight{% endblock %}
+
+{% block content %}
+<div class="page-content">
+    <h1>Create Squadron</h1>
+    <form action="{{ url_for('squadrons_reg') }}" method="POST">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="description">Description:</label>
+        <textarea id="description" name="description" rows="4" required></textarea>
+
+        <label for="members">Active Members:</label>
+        <input type="number" id="members" name="members" required>
+
+        <label for="creation_date">Creation Date:</label>
+        <input type="date" id="creation_date" name="creation_date" required>
+
+        <button type="submit">Create</button>
+    </form>
+</div>
+{% endblock %}
+
