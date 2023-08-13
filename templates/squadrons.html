@@ -4,9 +4,7 @@
 {% block title %}Virtual Squadrons - PreFlight{% endblock %}
 
 {% block content %}
-<div style="text-align: center !important;" id="CreateSquadron" class="user-actions">
-    <button onclick="location.href = '/squadrons_reg';">Create Squadron</button>
-</div>
+
 {% for el in squadrons %}
 <section id="about-us" class="col-md-6">
     <h2 style="text-align: left;">{{ el.name}}</h2>
@@ -16,5 +14,7 @@
     <hr><br />
 </section>
 {% endfor %}
-
+<div style="text-align: center !important;" id="CreateSquadron" class="user-actions">
+    <button onclick="location.href = '/squadrons_reg';">Create Squadron</button>
+</div>
 {% endblock %}
