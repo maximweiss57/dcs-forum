@@ -1,7 +1,19 @@
 {% extends "base.html" %}
 
-{% block title %}PreFlight{% endblock %}
+{% block title %}Downloads - PreFlight{% endblock %}
 
 {% block content %}
 
+{% for el in download %}
+<section id="about-us" class="col-md-6">
+    <h2 style="text-align: left;">{{ el.name}}</h2>
+    <p>{{ el.description }}</p>
+    <p>><b>{{ el.link }}</b></p>
+    <br />
+    <hr><br />
+</section>
+{% endfor %}
+<div style="text-align: center !important;" id="CreateSquadron" class="user-actions">
+    <button onclick="location.href = '/create_download';">Upload</button>
+</div>
 {% endblock %}
