@@ -1,7 +1,8 @@
-from flask import Flask, render_template, request, redirect, session
+from flask import Flask, render_template, request, redirect
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+from flask_migrate import Migrate
 
 app = Flask(__name__)
 
@@ -11,6 +12,7 @@ app.config['SECRET_KEY'] = 'dcs-forum'
 db = SQLAlchemy(app)
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
+migrate = Migrate(app, db)
 
 class Users(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -25,9 +27,17 @@ class Squadrons(db.Model):
     description = db.Column(db.Text(500), nullable=False)
     members = db.Column(db.Integer, nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    
+class download(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(80), unique=True, nullable=False)
+    description = db.Column(db.Text(500), nullable=False)
+    link = db.Column(db.Text(500), unique=True, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
 
 with app.app_context():
-    db.create_all() 
+    db.create_all()
+    
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -84,9 +94,26 @@ def logout():
 def forums():
     return render_template('forums.html', current_user=current_user)
 
-@app.route('/downloads')
+@app.route('/downloads',methods=['GET'])
 def downloads():
-    return render_template('downloads.html', current_user=current_user)
+    return render_template('downloads.html', current_user=current_user, download=download.query.order_by(download.created_at).all())
+
+@app.route('/create_download', methods=['POST', 'GET'])
+def create_download():
+    if request.method == 'POST':
+        name = request.form['name']
+        description = request.form['description']
+        link = request.form['link']
+        created_at = datetime.utcnow()
+        new_download = download(name=name, description=description, link=link, created_at=created_at)
+        try:
+            db.session.add(new_download)
+            db.session.commit()
+            return render_template('downloads.html', current_user=current_user, new_download=new_download)
+        except:     
+            return 'There was an issue with the upload process'
+    else:
+        return render_template('create_download.html')
 
 @app.route('/events')
 def events():
@@ -96,8 +123,6 @@ def events():
 def squadrons():
     squadrons = Squadrons.query.order_by(Squadrons.created_at).all()
     return render_template('squadrons.html',squadrons=squadrons, current_user=current_user)
-from datetime import datetime
-from flask import redirect
 
 @app.route('/squadrons_reg', methods=['POST', 'GET'])
 def squadrons_reg():
