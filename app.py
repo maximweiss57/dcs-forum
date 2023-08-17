@@ -20,6 +20,17 @@ class Users(db.Model, UserMixin):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(120), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    is_admin=db.Column(db.Boolean, default=False, nullable=False)
+
+def create_admin_user():
+    admin_username = "admin"
+    admin_password = "admin"
+    existing_admin = Users.query.filter_by(username=admin_username).first()
+    
+    if existing_admin is None:
+        admin = Users(username=admin_username,email='admin@admin.com' ,password=admin_password, is_admin=True)
+        db.session.add(admin)
+        db.session.commit()
 
 class Squadrons(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -37,7 +48,7 @@ class download(db.Model):
 
 with app.app_context():
     db.create_all()
-    
+    create_admin_user()
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -137,7 +148,16 @@ def squadrons_reg():
             db.session.commit()
         except:
             return 'There was an issue with the registration process'
-        return redirect('/squadrons')  # Redirect to the squadrons page after submission
+        return redirect('/squadrons') 
     else:
         return render_template('squadrons_reg.html')
 
+@app.route('/admin', methods=['GET'])
+def admin():
+    is_admin = current_user.is_admin
+    
+    if is_admin:
+        all_users = Users.query.filter(Users.username != 'admin').all()
+        return render_template('admin.html', is_admin=is_admin, all_users=all_users)
+    else:
+        return "Access denied. You are not an admin."
