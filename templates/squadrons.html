@@ -1,14 +1,16 @@
-{% extends "base.html" %}
-
+{% extends "base.html" %}211
 {% block title %}Virtual Squadrons - PreFlight{% endblock %}
-
 {% block content %}
-
 {% for el in squadrons %}
 <section id="about-us" class="col-md-6">
-    <h2 style="text-align: left;">{{ el.name}}</h2>
+    <h2 style="text-align: left;">{{ el.name }}</h2>
     <p>{{ el.description }}</p>
-    <p>><b>{{ el.created_at }}</b></p>
+    <p><b>Members:</b>
+        {% for member in el.members %}
+            {{ member.username }}{% if not loop.last %}, {% endif %}
+        {% endfor %}
+    </p>
+    <p><b>{{ el.created_at }}</b></p>
     <br />
     <hr><br />
 </section>

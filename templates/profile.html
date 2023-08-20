@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Virtual Squadrons - PreFlight{% endblock %}
+{% block content %}
+<div class="page-content">
+    <h1>User Profile</h1>
+    <div class="profile-info">
+        <p><strong>Username:</strong> {{ current_user.username }}</p>
+        <p><strong>Email:</strong> {{ current_user.email }}</p>
+        {% if current_user.squadron %}
+        <p><strong>Squadron:</strong> {{ current_user.squadron.name }}</p>
+        {% else %}
+        <p><strong>Squadron:</strong> Not Assigned</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

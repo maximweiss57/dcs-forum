@@ -6,7 +6,7 @@ from flask_migrate import Migrate
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///dcs-forum.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///dcs.forum.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'dcs-forum'
 db = SQLAlchemy(app)
@@ -21,6 +21,9 @@ class Users(db.Model, UserMixin):
     password = db.Column(db.String(120), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     is_admin=db.Column(db.Boolean, default=False, nullable=False)
+    squadron_id = db.Column(db.Integer, db.ForeignKey('squadrons.id'), nullable=True)
+    squadron = db.relationship('Squadrons', backref='users_in_squadron', foreign_keys=[squadron_id])
+
 
 def create_admin_user():
     admin_username = "admin"
@@ -35,15 +38,15 @@ def create_admin_user():
 class Squadrons(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(80), unique=True, nullable=False)
-    description = db.Column(db.Text(500), nullable=False)
-    members = db.Column(db.Integer, nullable=True)
+    description = db.Column(db.Text, nullable=False)
+    members = db.relationship('Users', backref='squadron_members', lazy=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
-    
-class download(db.Model):
+
+class Download(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(80), unique=True, nullable=False)
-    description = db.Column(db.Text(500), nullable=False)
-    link = db.Column(db.Text(500), unique=True, nullable=False)
+    description = db.Column(db.Text, nullable=False)
+    link = db.Column(db.Text, unique=True, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
 
 with app.app_context():
@@ -107,7 +110,7 @@ def forums():
 
 @app.route('/downloads',methods=['GET'])
 def downloads():
-    return render_template('downloads.html', current_user=current_user, download=download.query.order_by(download.created_at).all())
+    return render_template('downloads.html', current_user=current_user, download=Download.query.order_by(Download.created_at).all())
 
 @app.route('/create_download', methods=['POST', 'GET'])
 def create_download():
@@ -116,7 +119,7 @@ def create_download():
         description = request.form['description']
         link = request.form['link']
         created_at = datetime.utcnow()
-        new_download = download(name=name, description=description, link=link, created_at=created_at)
+        new_download = Download(name=name, description=description, link=link, created_at=created_at)
         try:
             db.session.add(new_download)
             db.session.commit()
@@ -140,17 +143,31 @@ def squadrons_reg():
     if request.method == 'POST':
         name = request.form['name']
         description = request.form['description']
-        members = request.form['members']  # Get active members from the form
-        created_at = datetime.utcnow()
-        squadron = Squadrons(name=name, description=description, members=members, created_at=created_at)
+        members_input = request.form['members']
+        created_at = request.form['created_at']
+        created_at = datetime.strptime(created_at, '%Y-%m-%d').date()
+        members_list = members_input.split(',')
+        new_squadron = Squadrons(name=name, description=description, created_at=created_at)
+        members = Users.query.filter(Users.username.in_(members_list)).all()
+        new_squadron.members = members
+
         try:
-            db.session.add(squadron)
+            db.session.add(new_squadron)
             db.session.commit()
-        except:
+
+            for member in members:
+                member.squadron = new_squadron.id
+
+            db.session.commit()
+
+            return redirect('/squadrons')
+        except Exception as e:
+            db.session.rollback()
+            print("Error:", e)
             return 'There was an issue with the registration process'
-        return redirect('/squadrons') 
     else:
         return render_template('squadrons_reg.html')
+
 
 @app.route('/admin', methods=['GET'])
 def admin():
@@ -161,3 +178,7 @@ def admin():
         return render_template('admin.html', is_admin=is_admin, all_users=all_users)
     else:
         return "Access denied. You are not an admin."
+
+@app.route('/profile', methods=['GET'])
+def profile():
+    return render_template('profile.html', current_user=current_user)
