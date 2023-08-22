@@ -1,18 +1,17 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect,url_for
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-from flask_migrate import Migrate
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///dcs.forum.db'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///dcsforum'
+app.config["SQLALCHEMY_DATABASE_URI"] = 'mysql+mysqlconnector://root:root@db/dcsforum'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'dcs-forum'
 db = SQLAlchemy(app)
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
-migrate = Migrate(app, db)
 
 class Users(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -24,6 +23,8 @@ class Users(db.Model, UserMixin):
     squadron_id = db.Column(db.Integer, db.ForeignKey('squadrons.id'), nullable=True)
     squadron = db.relationship('Squadrons', backref='users_in_squadron', foreign_keys=[squadron_id])
 
+    def __repr__(self):
+        return '<User %r>' % self.username
 
 def create_admin_user():
     admin_username = "admin"
@@ -42,13 +43,19 @@ class Squadrons(db.Model):
     members = db.relationship('Users', backref='squadron_members', lazy=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
 
+    def __repr__(self):
+        return '<Squadron %r>' % self.name
+    
 class Download(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(80), unique=True, nullable=False)
     description = db.Column(db.Text, nullable=False)
-    link = db.Column(db.Text, unique=True, nullable=False)
+    link = db.Column(db.String(255), unique=True, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
 
+    def __repr__(self):
+        return '<Download %r>' % self.name
+    
 with app.app_context():
     db.create_all()
     create_admin_user()
@@ -153,14 +160,15 @@ def squadrons_reg():
 
         try:
             db.session.add(new_squadron)
+            print("1")
             db.session.commit()
-
+            print("2")
             for member in members:
                 member.squadron = new_squadron.id
-
+                print("3")
             db.session.commit()
-
-            return redirect('/squadrons')
+            print("4")
+            return redirect (url_for('/squadrons'))
         except Exception as e:
             db.session.rollback()
             print("Error:", e)

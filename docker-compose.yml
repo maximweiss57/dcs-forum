@@ -1,20 +1,22 @@
+version: 'version: "3.7"'
 services:
-  db:
-    image: mysql
+  db: 
+    image: mysql:5.7
+    container_name: mysql
     restart: always
-    ports:
-      - 3307:3306
+    ports:  
+      - "3307:3306"
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: db
+      MYSQL_DATABASE: dcsforum
     volumes:
       - db_data:/var/lib/mysql  
 
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-      - 8080:8080
+  #adminer:
+    #image: adminer
+    #restart: always
+    #ports:
+      #- 8080:8080
 
   web:
     build: .
@@ -23,9 +25,11 @@ services:
     depends_on:
       - db  
     ports:
-      - 5000:5000
+      - "5000:5000"
     environment:
-      DATABASE_URL: mysql://root:root@db:3306/dcs_forum 
+      SQLALCHEMY_DATABASE_URI: 'mysql://root:root@mysql/dcsforum'
+      SQLALCHEMY_TRACK_MODIFICATIONS: 'False'
+      SECRET_KEY: 'dcs-forum'
     volumes:
       - ./app:/app 
 
