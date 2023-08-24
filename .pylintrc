@@ -1,0 +1,17 @@
+[MASTER]
+init-hook='import sys; sys.path.append(".")'
+
+[MESSAGES CONTROL]
+disable=C0114,C0115,C0116,E0401,C0103,R0914,W0718,C0411,C0415,C0209,W0622,W0613,R0903,W0621,C0303,W0702
+
+[FORMAT]
+max-line-length=120
+
+[BASIC]
+bad-names=i,j,k,ex,Run,_
+
+[IMPORTS]
+init-import=yes
+
+[pylint.'formapp.validators']
+ignore = too-few-public-methods
