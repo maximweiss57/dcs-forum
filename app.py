@@ -5,7 +5,7 @@ from datetime import datetime
 
 app = Flask(__name__)
 
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///dcsforum'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///dcsforum'
 app.config["SQLALCHEMY_DATABASE_URI"] = 'mysql+mysqlconnector://root:root@db/dcsforum'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'dcs-forum'
@@ -66,6 +66,7 @@ def load_user(user_id):
 
 @app.route('/')
 def index():
+    print("michael gabay")
     return render_template('index.html', current_user=current_user)
 
 @app.route('/index.html')
@@ -147,7 +148,9 @@ def squadrons():
 
 @app.route('/squadrons_reg', methods=['POST', 'GET'])
 def squadrons_reg():
+    print ("inside routeøß")
     if request.method == 'POST':
+        print("0")
         name = request.form['name']
         description = request.form['description']
         members_input = request.form['members']
@@ -168,11 +171,11 @@ def squadrons_reg():
                 print("3")
             db.session.commit()
             print("4")
-            return redirect (url_for('/squadrons'))
+            return redirect('/squadrons')
         except Exception as e:
             db.session.rollback()
             print("Error:", e)
-            return 'There was an issue with the registration process'
+            return 'There was an issue with the squadron registration process'
     else:
         return render_template('squadrons_reg.html')
 
