@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect,url_for
+from flask import Flask, render_template, request, redirect
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
@@ -6,7 +6,7 @@ from datetime import datetime
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///dcsforum'
-app.config["SQLALCHEMY_DATABASE_URI"] = 'mysql+mysqlconnector://root:root@db/dcsforum'
+#app.config["SQLALCHEMY_DATABASE_URI"] = 'mysql+mysqlconnector://root:root@db/dcsforum'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'dcs-forum'
 db = SQLAlchemy(app)
@@ -82,9 +82,9 @@ def login():
         if user:
             if user.password == password:
                 login_user(user)
+                
                 return redirect('/index.html')
-            else:
-                return 'Wrong password'
+            
         else:
             return 'User not found'
     else:
@@ -100,7 +100,7 @@ def register():
         try:
             db.session.add(user)
             db.session.commit()
-        except:
+        except :
             return 'There was an issue with the registration process'
         return redirect('/login')
     else:
@@ -118,7 +118,8 @@ def forums():
 
 @app.route('/downloads',methods=['GET'])
 def downloads():
-    return render_template('downloads.html', current_user=current_user, download=Download.query.order_by(Download.created_at).all())
+    return render_template(
+        'downloads.html', current_user=current_user, download=Download.query.order_by(Download.created_at).all())
 
 @app.route('/create_download', methods=['POST', 'GET'])
 def create_download():
@@ -192,4 +193,5 @@ def admin():
 
 @app.route('/profile', methods=['GET'])
 def profile():
-    return render_template('profile.html', current_user=current_user)
+    return render_template(
+        'profile.html', current_user=current_user)
