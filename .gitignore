@@ -1,6 +1,7 @@
 __pycache__/
 vscode/
 .venv/
-instance/
+instance/__pycache__
+instance/*.db
 .app.backup.txt
 ```
