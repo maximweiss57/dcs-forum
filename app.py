@@ -1,26 +1,11 @@
 from flask import Flask, render_template, request, redirect
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
-from models import db, Users, Squadrons, Download
+from models import Users, Squadrons, Download
 from datetime import datetime
+from instance import db
+
 
 app = Flask(__name__)
-
-
-def create_app(database_uri='sqlite:///dcsforum'):
-    app = Flask(__name__)
-    app.config["TESTING"] = True
-    app.config['SQLALCHEMY_DATABASE_URI'] = database_uri
-    app.config['SECRET_KEY'] = 'dcs-forum'
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    return app
-
-
-app.config["TESTING"] = False
-app.config["SQLALCHEMY_DATABASE_URI"] = 'sqlite:///dcsforum'
-# app.config["SQLALCHEMY_DATABASE_URI"] = 'mysql+mysqlconnector://root:root@db/dcsforum'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECRET_KEY'] = 'dcs-forum'
-db.init_app(app)
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 
@@ -38,9 +23,23 @@ def create_admin_user():
         db.session.commit()
 
 
-with app.app_context():
-    db.create_all()
-    create_admin_user()
+def create_app(status):
+    app = Flask(__name__)
+
+    if status == 'testing':
+        app.config.from_object('config.TestingConfig')
+    elif status == 'development':
+        app.config.from_object('config.DevelopmentConfig')
+    else:
+        app.config.from_object('config.ProductionConfig')
+
+    db.init_app(app)
+    login_manager.init_app(app)
+
+    with app.app_context():
+        db.create_all()
+
+    return app
 
 
 @login_manager.user_loader
@@ -50,13 +49,13 @@ def load_user(user_id):
 
 @app.route('/')
 def index():
-    print("michael gabay")
+    print('asdfasfdas')
     return render_template('index.html', current_user=current_user)
 
-
-@app.route('/index.html')
-def index2():
-    return render_template('index.html', current_user=current_user)
+@app.route('/test')
+def test():
+    print('test')
+print('running')
 
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -160,14 +159,10 @@ def squadrons_reg():
 
         try:
             db.session.add(new_squadron)
-            print("1")
             db.session.commit()
-            print("2")
             for member in members:
                 member.squadron = new_squadron.id
-                print("3")
             db.session.commit()
-            print("4")
             return redirect('/squadrons')
         except Exception as e:
             db.session.rollback()
