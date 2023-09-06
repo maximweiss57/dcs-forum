@@ -3,7 +3,7 @@ from flask_login import login_user, login_required, logout_user, current_user
 from models import Users, Squadrons, Download
 from datetime import datetime
 from instance import db
-from app import app
+from app_running_conf import app
 
 
 @app.route('/')
