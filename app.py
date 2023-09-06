@@ -4,13 +4,7 @@ from models import Users, Squadrons, Download
 from datetime import datetime
 from instance import db
 
-
-app = Flask(__name__)
-login_manager = LoginManager(app)
-login_manager.login_view = 'login'
-
-
-def create_admin_user():
+def create_admin_user(app):
     admin_username = "admin"
     admin_password = "admin"
     with app.app_context():
@@ -26,21 +20,24 @@ def create_admin_user():
 def create_app(status):
     app = Flask(__name__)
 
-    if status == 'testing':
-        app.config.from_object('config.TestingConfig')
-    elif status == 'development':
+    if status == 'development':
         app.config.from_object('config.DevelopmentConfig')
     else:
         app.config.from_object('config.ProductionConfig')
 
     db.init_app(app)
-    login_manager.init_app(app)
+    
 
     with app.app_context():
         db.create_all()
-
+        create_admin_user(app)
     return app
 
+    
+app=create_app('development')
+login_manager = LoginManager(app)
+login_manager.login_view = 'login'
+login_manager.init_app(app)
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -49,13 +46,11 @@ def load_user(user_id):
 
 @app.route('/')
 def index():
-    print('asdfasfdas')
     return render_template('index.html', current_user=current_user)
 
 @app.route('/test')
 def test():
     print('test')
-print('running')
 
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -68,7 +63,7 @@ def login():
             if user.password == password:
                 login_user(user)
 
-                return redirect('/index.html')
+                return redirect('/')
 
         else:
             return 'User not found'
@@ -97,7 +92,7 @@ def register():
 @login_required
 def logout():
     logout_user()
-    return redirect('/index.html')
+    return redirect('/')
 
 
 @app.route('/forums')
