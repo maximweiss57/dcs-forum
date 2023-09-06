@@ -4,16 +4,12 @@ from instance import db
 
 @pytest.fixture
 def app():
-    app = create_app(status='development')
+    app = create_app(testing=True)
     app.config['TESTING'] = True
     with app.app_context():
         db.create_all()
     yield app
 
-    with app.app_context():
-        db.drop_all()
-
 @pytest.fixture
 def client(app):
-    with app.test_client() as client:
-        yield client
+    return app.test_client()
