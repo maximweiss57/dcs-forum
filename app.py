@@ -1,8 +1,7 @@
-from flask import Flask, Blueprint,url_for
+from flask import Flask
 from flask_login import LoginManager
 from models import Users
 from instance import db
-from routes import routes_bp
 
 def create_admin_user(app):
     admin_username = "admin"
@@ -30,9 +29,8 @@ def create_app(testing):
         app.config["SQLALCHEMY_DATABASE_URI"]= 'mysql+mysqlconnector://root:root@db/dcsforum'
 
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    
+
     db.init_app(app)
-    app.register_blueprint(routes_bp)
     login_manager = LoginManager(app)
     login_manager.login_view = 'login'
     login_manager.init_app(app)

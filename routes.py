@@ -1,16 +1,17 @@
-from flask import render_template, request, redirect, Blueprint,url_for
+from flask import render_template, request, redirect
 from flask_login import login_user, login_required, logout_user, current_user
 from models import Users, Squadrons, Download
 from datetime import datetime
 from instance import db
+from app_running_conf import app
 
-routes_bp = Blueprint('routes_bp', __name__, url_prefix='/', template_folder='templates')
 
-@routes_bp.route('/')
+@app.route('/')
 def index():
     return render_template('index.html', current_user=current_user)
 
-@routes_bp.route('/login', methods=['POST', 'GET'])
+
+@app.route('/login', methods=['POST', 'GET'])
 def login():
     if request.method == 'POST':
         username = request.form['username']
@@ -19,13 +20,16 @@ def login():
         if user:
             if user.password == password:
                 login_user(user)
+
                 return render_template('index.html', current_user=current_user)
+
         else:
             return 'User not found'
     else:
         return render_template('login.html')
 
-@routes_bp.route('/register', methods=['POST', 'GET'])
+
+@app.route('/register', methods=['POST', 'GET'])
 def register():
     if request.method == 'POST':
         username = request.form['username']
@@ -41,22 +45,26 @@ def register():
     else:
         return render_template('register.html')
 
-@routes_bp.route('/logout')
+
+@app.route('/logout')
 @login_required
 def logout():
     logout_user()
     return redirect('/')
 
-@routes_bp.route('/forums')
+
+@app.route('/forums')
 def forums():
     return render_template('forums.html', current_user=current_user)
 
-@routes_bp.route('/downloads', methods=['GET'])
+
+@app.route('/downloads', methods=['GET'])
 def downloads():
     return render_template(
         'downloads.html', current_user=current_user, download=Download.query.order_by(Download.created_at).all())
 
-@routes_bp.route('/create_download', methods=['POST', 'GET'])
+
+@app.route('/create_download', methods=['POST', 'GET'])
 def create_download():
     if request.method == 'POST':
         name = request.form['name']
@@ -74,18 +82,21 @@ def create_download():
     else:
         return render_template('create_download.html')
 
-@routes_bp.route('/events')
+
+@app.route('/events')
 def events():
     return render_template('events.html', current_user=current_user)
 
-@routes_bp.route('/squadrons', methods=['POST', 'GET'])
+
+@app.route('/squadrons', methods=['POST', 'GET'])
 def squadrons():
     squadrons = Squadrons.query.order_by(Squadrons.created_at).all()
     return render_template('squadrons.html', squadrons=squadrons, current_user=current_user)
 
-@routes_bp.route('/squadrons_reg', methods=['POST', 'GET'])
+
+@app.route('/squadrons_reg', methods=['POST', 'GET'])
 def squadrons_reg():
-    print("inside route")
+    print("inside routeøß")
     if request.method == 'POST':
         print("0")
         name = request.form['name']
@@ -113,7 +124,8 @@ def squadrons_reg():
     else:
         return render_template('squadrons_reg.html')
 
-@routes_bp.route('/admin', methods=['GET'])
+
+@app.route('/admin', methods=['GET'])
 def admin():
     is_admin = current_user.is_admin
 
@@ -123,7 +135,8 @@ def admin():
     else:
         return "Access denied. You are not an admin."
 
-@routes_bp.route('/profile', methods=['GET'])
+
+@app.route('/profile', methods=['GET'])
 def profile():
     return render_template(
         'profile.html', current_user=current_user)
