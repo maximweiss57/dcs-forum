@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}{% endblock %}</title>
+    <title>{% block title %}Title{% endblock %}</title>
     <link rel="stylesheet" href="../static/styles.css">
     <link rel="icon" href="../static/logo">
 </head>
@@ -13,16 +13,16 @@
     <body class="background-image" style="background-image:url(../static/back1);"></body>
     <nav>
         <div class="logo">
-            <a href="{{ url_for('routes_bp.index') }}">
+            <a href="{{ url_for('index') }}">
                 <img src="../static/logo" alt="Forum Logo" class="rounded-circle">
             </a>
         </div>
         <ul class="nav-links float-left">
-            <li><a id="mainpage" href="{{ url_for('routes_bp.index') }}">PreFlight</a></li>
-            <li><a href="{{ url_for('routes_bp.squadrons') }}">Squadrons</a></li>
-            <li><a href="{{ url_for('routes_bp.forums') }}">Forums</a></li>
-            <li><a href="{{ url_for('routes_bp.events') }}">Events</a></li>
-            <li><a href="{{ url_for('routes_bp.downloads') }}">Downloads</a></li>
+            <li><a id="mainpage" href="{{ url_for('index') }}">PreFlight</a></li>
+            <li><a href="{{ url_for('squadrons') }}">Squadrons</a></li>
+            <li><a href="{{ url_for('forums') }}">Forums</a></li>
+            <li><a href="{{ url_for('events') }}">Events</a></li>
+            <li><a href="{{ url_for('downloads') }}">Downloads</a></li>
             <li class="search-bar">
                 <input type="text" placeholder="Search...">
                 <button type="submit">Search</button>
