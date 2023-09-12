@@ -9,6 +9,8 @@ def app():
     with app.app_context():
         db.create_all()
     yield app
+    with app.app_context():
+        db.drop_all()
 
 @pytest.fixture
 def client(app):
