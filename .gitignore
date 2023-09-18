@@ -3,5 +3,6 @@ vscode/
 .venv/
 instance/__pycache__
 instance/*.db
-.app.backup.txt
+.vscode/
+.pytest_cache/
 ```

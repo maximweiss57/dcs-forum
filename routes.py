@@ -49,7 +49,7 @@ def logout():
 
 @routes_bp.route('/forums')
 def forums():
-    return render_template('forums.html', current_user=current_user)
+    return render_template('Forums.html', current_user=current_user)
 
 @routes_bp.route('/downloads', methods=['GET'])
 def downloads():
