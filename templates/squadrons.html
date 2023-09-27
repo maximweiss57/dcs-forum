@@ -1,4 +1,4 @@
-{% extends "base.html" %}211
+{% extends "base.html" %}
 {% block title %}Virtual Squadrons - PreFlight{% endblock %}
 {% block content %}
 {% for el in squadrons %}
@@ -13,9 +13,36 @@
     <p><b>{{ el.created_at }}</b></p>
     <br />
     <hr><br />
+    {% if current_user.is_authenticated %}
+    <div style="text-align: center !important;" class="user-actions">
+        <button onclick="joinSquadron('{{ el.id }}');">Join squadron</button>
+    </div>
+    {% endif %}
 </section>
 {% endfor %}
-<div style="text-align: center !important;" id="CreateSquadron" class="user-actions">
+<div style="text-align: center !important;" class="user-actions">
     <button onclick="location.href = '/squadrons_reg';">Create Squadron</button>
 </div>
+<script>
+function joinSquadron(squadronId) {
+    fetch('/join_squadron/' + squadronId, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => {
+        if (response.ok) {
+            // Handle success, e.g., update the UI or show a success message.
+            alert('Joined squadron successfully!');
+        } else {
+            // Handle errors, e.g., show an error message.
+            alert('Failed to join squadron.');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+</script>
 {% endblock %}

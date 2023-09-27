@@ -85,7 +85,6 @@ def squadrons():
 
 @routes_bp.route('/squadrons_reg', methods=['POST', 'GET'])
 def squadrons_reg():
-    print("inside route")
     if request.method == 'POST':
         print("0")
         name = request.form['name']
@@ -127,3 +126,19 @@ def admin():
 def profile():
     return render_template(
         'profile.html', current_user=current_user)
+
+@routes_bp.route('/leave_squadron', methods=['GET'])
+def leave_squadron():
+    current_user.squadron = None
+    db.session.commit()
+    return redirect('/profile')
+
+from flask import render_template, request, redirect, url_for
+
+@routes_bp.route('/join_squadron/<int:squadron_id>', methods=['GET','POST'])
+def join_squadron(squadron_id):
+    squadron = Squadrons.query.get(squadron_id)  
+    current_user.squadron = squadron
+    db.session.commit()
+
+    return redirect(url_for('routes_bp.squadrons'))

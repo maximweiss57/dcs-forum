@@ -10,7 +10,7 @@ class Users(db.Model, UserMixin):
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     is_admin = db.Column(db.Boolean, default=False, nullable=False)
     squadron_id = db.Column(db.Integer, db.ForeignKey('squadrons.id'), nullable=True)
-    squadron = db.relationship('Squadrons', foreign_keys=[squadron_id], lazy=True)
+    squadron = db.relationship('Squadrons', lazy=True)
 
     def __repr__(self):
         return '<User %r>' % self.username
