@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, Blueprint,url_for
+from flask import render_template, request, redirect, Blueprint,url_for, flash
 from flask_login import login_user, login_required, logout_user, current_user
 from models import Users, Squadrons, Download
 from datetime import datetime
@@ -111,21 +111,26 @@ def squadrons_reg():
             return 'There was an issue with the squadron registration process'
     else:
         return render_template('squadrons_reg.html')
-
+    
 @routes_bp.route('/admin', methods=['GET'])
 def admin():
     is_admin = current_user.is_admin
 
-    if is_admin:
-        all_users = Users.query.filter(Users.username != 'admin').all()
-        return render_template('admin.html', is_admin=is_admin, all_users=all_users)
-    else:
-        return "Access denied. You are not an admin."
+    if not is_admin:
+        flash("Access denied. You are not an admin.", "error")
+        return redirect(url_for('routes_bp.index'))
 
-@routes_bp.route('/profile', methods=['GET'])
-def profile():
-    return render_template(
-        'profile.html', current_user=current_user)
+    try:
+        from sqlalchemy.orm import joinedload
+
+        all_users = Users.query.filter(Users.username != 'admin').with_entities(
+    Users.id, Users.username, Users.email, Users.password, Users.squadron_id)
+
+        return render_template('admin.html', is_admin=is_admin, all_users=all_users)
+    except Exception as e:
+        flash("An error occurred while retrieving user data.", "error")
+        return redirect(url_for('routes_bp.index'))
+
 
 @routes_bp.route('/leave_squadron', methods=['GET'])
 def leave_squadron():

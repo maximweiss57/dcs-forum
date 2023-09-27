@@ -3,11 +3,16 @@
 {% block title %}Admin-PreFlight{% endblock %}
 
 {% block content %}
-{% for el in users%}
+{% for user in all_users %}
 <section id="about-us" class="col-md-6">
-    <h2 style="text-align: left;">{{ el.username}}</h2>
-    <p>{{ el.password }}</p>
-    <p>><b>{{ el.email }}</b></p>
+    <h2 style="text-align: left;">{{ user.username }}</h2>
+    <p><b>Email:</b> {{ user.email }}</p>
+    <p><b>Password:</b> {{ user.password }}</p>
+    {% if user.squadron %}
+    <p><b>Squadron:</b> {{ user.squadron.name }}</p>
+    {% else %}
+    <p><b>Squadron:</b> No Squadron Assigned</p>
+    {% endif %}
     <br />
     <hr><br />
 </section>
