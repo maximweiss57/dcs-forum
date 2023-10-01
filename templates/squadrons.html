@@ -13,6 +13,11 @@
     <p><b>{{ el.created_at }}</b></p>
     <br />
     <hr><br />
+    {% if current_user.is_admin %}
+    <div style="text-align: left !important;" class="user-actions">
+        <button onclick="deleteSquadron('{{ el.id }}');">Delete squadron</button>
+    </div>
+    {% endif %}
     {% if current_user.is_authenticated %}
     <div style="text-align: center !important;" class="user-actions">
         <button onclick="joinSquadron('{{ el.id }}');">Join squadron</button>
@@ -20,11 +25,13 @@
     {% endif %}
 </section>
 {% endfor %}
+{% if current_user.is_authenticated %}
 <div style="text-align: center !important;" class="user-actions">
     <button onclick="location.href = '/squadrons_reg';">Create Squadron</button>
 </div>
+{% endif %}
 <script>
-function joinSquadron(squadronId) {
+    function joinSquadron(squadronId) {
     fetch('/join_squadron/' + squadronId, {
         method: 'POST',
         headers: {
@@ -33,10 +40,9 @@ function joinSquadron(squadronId) {
     })
     .then(response => {
         if (response.ok) {
-            // Handle success, e.g., update the UI or show a success message.
             alert('Joined squadron successfully!');
+            window.location.reload();
         } else {
-            // Handle errors, e.g., show an error message.
             alert('Failed to join squadron.');
         }
     })
@@ -44,5 +50,29 @@ function joinSquadron(squadronId) {
         console.error('Error:', error);
     });
 }
+
+function deleteSquadron(squadronId) {
+    if (confirm('Are you sure you want to delete this squadron?')) {
+        fetch('/delete_squadron/' + squadronId, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => {
+            if (response.ok) {
+                alert('Squadron deleted successfully!');
+                document.getElementById('squadron-' + squadronId).remove();
+                window.location.reload();
+            } else {
+                alert('Failed to delete squadron.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+}
 </script>
 {% endblock %}
+
