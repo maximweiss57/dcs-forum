@@ -104,7 +104,7 @@ def squadrons_reg():
             for member in members:
                 member.squadron = new_squadron.id
             db.session.commit()
-            return redirect('/squadrons')
+            return redirect(url_for('routes_bp.squadrons'))
         except Exception as e:
             db.session.rollback()
             print("Error:", e)
@@ -145,5 +145,22 @@ def join_squadron(squadron_id):
     squadron = Squadrons.query.get(squadron_id)  
     current_user.squadron = squadron
     db.session.commit()
+
+    return redirect(url_for('routes_bp.squadrons'))
+
+@routes_bp.route('/delete_squadron/<int:squadron_id>', methods=['GET', 'POST'])
+def delete_squadron(squadron_id):
+    squadron = Squadrons.query.get(squadron_id)
+    if squadron:
+        if current_user.is_admin:
+            try:
+                db.session.delete(squadron)
+                db.session.commit()
+                flash('Squadron deleted successfully', 'success,refresh page for updates to take place')
+                
+            except Exception as e:
+                db.session.rollback()
+    else:
+        flash('Squadron not found', 'error')
 
     return redirect(url_for('routes_bp.squadrons'))
