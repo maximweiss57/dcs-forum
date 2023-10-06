@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - 'main'
-  
 
 permissions:
   contents: read
@@ -28,12 +27,21 @@ jobs:
     - name: run tests
       run: |
         pytest
-        
-    - name: send custom message
+
+    - name: send custom message on success
+      if: success()
       uses: appleboy/telegram-action@master
       with:
         to: ${{ secrets.TELEGRAM_CHAT_ID }}
         token: ${{ secrets.TELEGRAM_TOKEN }}
         message: |
-          The ${{ github.event_name }} event triggered final step.
-          echo This event is a pull request that had an assignee removed.
+          New ${{ github.event_name }}, tests passed.
+
+    - name: send custom message on failure
+      if: failure()
+      uses: appleboy/telegram-action@master
+      with:
+        to: ${{ secrets.TELEGRAM_CHAT_ID }}
+        token: ${{ secrets.TELEGRAM_TOKEN }}
+        message: |
+          New ${{ github.event_name }}, tests failed.
