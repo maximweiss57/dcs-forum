@@ -36,6 +36,7 @@ def register():
             db.session.add(user)
             db.session.commit()
         except:
+            print("user registration failed")
             return 'There was an issue with the registration process'
         return redirect('/login')
     else:
