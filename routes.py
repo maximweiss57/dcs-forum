@@ -16,14 +16,13 @@ def login():
         username = request.form['username']
         password = request.form['password']
         user = Users.query.filter_by(username=username).first()
-        if user:
-            if user.password == password:
-                login_user(user)
-                return render_template('index.html', current_user=current_user)
+        if user and user.password == password:
+            login_user(user)
+            flash('Login successful', 'success')
+            return redirect(url_for('routes_bp.index'))
         else:
-            return 'User not found'
-    else:
-        return render_template('login.html')
+            return redirect(url_for('routes_bp.login'))
+    return render_template('login.html')
 
 @routes_bp.route('/register', methods=['POST', 'GET'])
 def register():
@@ -94,6 +93,11 @@ def squadrons_reg():
         created_at = request.form['created_at']
         created_at = datetime.strptime(created_at, '%Y-%m-%d').date()
         members_list = members_input.split(',')
+
+        existing_squadron = Squadrons.query.filter_by(name=name).first()
+        if existing_squadron:
+            return 'A squadron with the same name already exists. Please choose a different name.'
+
         new_squadron = Squadrons(
             name=name, description=description, created_at=created_at)
         members = Users.query.filter(Users.username.in_(members_list)).all()
@@ -102,14 +106,14 @@ def squadrons_reg():
         try:
             db.session.add(new_squadron)
             db.session.commit()
-            for member in members:
-                member.squadron = new_squadron.id
+            new_squadron.members = members  # Assign the members directly
             db.session.commit()
             return redirect(url_for('routes_bp.squadrons'))
         except Exception as e:
             db.session.rollback()
             print("Error:", e)
             return 'There was an issue with the squadron registration process'
+
     else:
         return render_template('squadrons_reg.html')
     
