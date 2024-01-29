@@ -63,17 +63,21 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
+      - name: Set ECR_REGISTRY variable
+        id: set-ecr-registry
+        run: echo "::set-output name=ECR_REGISTRY::$(aws ecr describe-repositories --repository-names dcs-forum --query 'repositories[0].repositoryUri' --output text)"
+
       - name: Print environment variables
         run: |
-          echo "ECR_REGISTRY: $ECR_REGISTRY"
-          echo "ECR_REPOSITORY: $ECR_REPOSITORY"
-          echo "IMAGE_TAG: $IMAGE_TAG"
+          echo "ECR_REGISTRY: ${{ steps.set-ecr-registry.outputs.ECR_REGISTRY }}"
+          echo "ECR_REPOSITORY: dcs-forum"
+          echo "IMAGE_TAG: ${{ github.sha }}"
           echo "PWD: $(pwd)"        
 
       - name: Build and Push the Image to Amazon ECR
         id: build-image
         env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REGISTRY: ${{ steps.set-ecr-registry.outputs.ECR_REGISTRY }}
           ECR_REPOSITORY: dcs-forum
           IMAGE_TAG: ${{ github.sha }}
       
