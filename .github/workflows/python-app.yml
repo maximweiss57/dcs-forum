@@ -49,6 +49,7 @@ jobs:
             New ${{ github.event_name }}, tests failed.
 
   CD:
+    needs : [test]
     name: build and push
     runs-on: ubuntu-latest
     steps:
