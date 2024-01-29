@@ -73,7 +73,7 @@ jobs:
         run: |
           ls -la
           echo "PWD: $(pwd)"        
-          docker build -t dcs-forum . 
+          docker build -t dcs-forum -f /home/runner/work/dcs-forum/dcs-forum/Dockerfile /home/runner/work/dcs-forum/dcs-forum 
           docker push public.ecr.aws/p1c7r0w5/dcs-forum:latest
 
       - name: Send custom message on push
