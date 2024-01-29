@@ -62,19 +62,20 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
-
+        
       - name: Build and Push the Image to Amazon ECR
         id: build-image
         env:
           ECR_REGISTRY: public.ecr.aws/p1c7r0w5/dcs-forum
           ECR_REPOSITORY: dcs-forum
           IMAGE_TAG: ${{ github.sha }}
-        
+          
         run: |
           ls -la
-          echo "PWD: $(pwd)"        
-          docker build -t dcs-forum -f /home/runner/work/dcs-forum/dcs-forum/Dockerfile /home/runner/work/dcs-forum/dcs-forum 
-          docker push public.ecr.aws/p1c7r0w5/dcs-forum:latest
+          echo "PWD: $(pwd)"
+          cd /home/runner/work/dcs-forum/dcs-forum
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -f Dockerfile .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG 
 
       - name: Send custom message on push
         if: success()
