@@ -1,6 +1,6 @@
 FROM python:slim
-COPY . /DCS-FORUM
-WORKDIR /DCS-FORUM
+COPY . /dcs-forum
+WORKDIR /dcs-forum
 EXPOSE 5000
 RUN pip install -r requirements.txt
 CMD ["python", "run.py"]
