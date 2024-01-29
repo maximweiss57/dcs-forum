@@ -81,8 +81,8 @@ jobs:
           IMAGE_TAG: ${{ github.sha }}
         
         run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -f /home/runner/work/dcs-forum/dcs-forum/Dockerfile /home/runner/work/dcs-forum/dcs-forum
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker build -t dcs-forum . 
+          docker push public.ecr.aws/p1c7r0w5/dcs-forum:latest
 
       - name: Send custom message on push
         if: success()
