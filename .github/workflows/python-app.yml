@@ -73,18 +73,16 @@ jobs:
           echo "ECR_REPOSITORY: dcs-forum"
           echo "IMAGE_TAG: ${{ github.sha }}"
           echo "PWD: $(pwd)"        
-
       - name: Build and Push the Image to Amazon ECR
         id: build-image
         env:
-          ECR_REGISTRY: ${{ steps.set-ecr-registry.outputs.ECR_REGISTRY }}
+          ECR_REGISTRY: public.ecr.aws/p1c7r0w5/dcs-forum
           ECR_REPOSITORY: dcs-forum
           IMAGE_TAG: ${{ github.sha }}
         
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -f /home/runner/work/dcs-forum/dcs-forum/Dockerfile /home/runner/work/dcs-forum/dcs-forum
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-
 
       - name: Send custom message on push
         if: success()
