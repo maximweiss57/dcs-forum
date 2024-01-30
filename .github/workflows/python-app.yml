@@ -66,15 +66,18 @@ jobs:
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
+      
+    - name: pip update
+      run: |
+       pip install --upgrade pip
 
     - name: Build, Tag, and Push the Image to Amazon ECR
       id: build-image
       env:
-        ECR_REGISTRY: 147795790026.dkr.ecr.us-east-1.amazonaws.com/dcs-forum
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: dcs-forum
         IMAGE_TAG: latest
       run: |
-        pip install --upgrade pip
         docker build --no-cache -t dcsforum:$IMAGE_TAG .
         docker tag dcsforum:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         docker ps
