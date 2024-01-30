@@ -71,7 +71,7 @@ jobs:
       id: build-image
       env:
         ECR_REGISTRY: 147795790026.dkr.ecr.us-east-1.amazonaws.com/dcs-forum
-        ECR_REPOSITORY: dcs-forum
+        ECR_REPOSITORY: dcsforum
         IMAGE_TAG: latest
       run: |
         docker build --no-cache -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
