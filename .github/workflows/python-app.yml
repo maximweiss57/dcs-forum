@@ -74,7 +74,7 @@ jobs:
         ECR_REPOSITORY: dcs-forum
         IMAGE_TAG: latest
       run: |
-        docker build --no-cache -t dcsforum .
+        docker build --no-cache -t dcsforum:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
     - name: Send custom message on success
