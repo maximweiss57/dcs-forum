@@ -70,12 +70,31 @@ jobs:
     - name: Build, Tag, and Push the Image to Amazon ECR
       id: build-image
       env:
-        ECR_REGISTRY: public.ecr.aws/p1c7r0w5/dcs-forum
+        ECR_REGISTRY: 147795790026.dkr.ecr.us-east-1.amazonaws.com/dcs-forum
         ECR_REPOSITORY: dcs-forum
         IMAGE_TAG: latest
       run: |
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
+        - name: Send custom message on success
+          if: success()
+          uses: appleboy/telegram-action@master
+          with:
+            to: ${{ secrets.TELEGRAM_CHAT_ID }}
+            token: ${{ secrets.TELEGRAM_TOKEN }}
+            message: |
+              saccesful push to production.
+  
+        - name: Send custom message on failure
+          if: failure()
+          uses: appleboy/telegram-action@master
+          with:
+            to: ${{ secrets.TELEGRAM_CHAT_ID }}
+            token: ${{ secrets.TELEGRAM_TOKEN }}
+            message: |
+              failed push to production.
+        
 
 
 
