@@ -12,12 +12,6 @@ services:
     volumes:
       - db_data:/var/lib/mysql  
 
-  #adminer:
-    #image: adminer
-    #restart: always
-    #ports:
-      #- 8080:8080
-
   web:
     build: .
     container_name: dcs-forum
