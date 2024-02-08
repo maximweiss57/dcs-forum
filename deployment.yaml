@@ -53,12 +53,12 @@ spec:
     spec:
       containers:
       - name: web
-        image: your-docker-image # Replace with your actual Docker image
+        image: 147795790026.dkr.ecr.us-east-1.amazonaws.com/dcs-forum
         ports:
         - containerPort: 5000
         env:
         - name: SQLALCHEMY_DATABASE_URI
-          value: 'mysql://root:root@mysql:3306/dcsforum'  # Updated connection string
+          value: 'mysql://root:root@mysql:3306/dcsforum' 
         - name: SQLALCHEMY_TRACK_MODIFICATIONS
           value: 'False'
         - name: SECRET_KEY
