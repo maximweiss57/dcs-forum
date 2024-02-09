@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, Blueprint,url_for, flash
+from flask import render_template, request, redirect, Blueprint, url_for, flash
 from flask_login import login_user, login_required, logout_user, current_user
 from models import Users, Squadrons, Download
 from datetime import datetime
@@ -21,6 +21,7 @@ def login():
             flash('Login successful', 'success')
             return redirect(url_for('routes_bp.index'))
         else:
+            flash('Invalid username or password', 'error')
             return redirect(url_for('routes_bp.login'))
     return render_template('login.html')
 
@@ -34,18 +35,20 @@ def register():
         try:
             db.session.add(user)
             db.session.commit()
-        except:
-            print("user registration failed")
-            return 'There was an issue with the registration process'
-        return redirect('/login')
-    else:
-        return render_template('register.html')
+            flash('Registration successful', 'success')
+            return redirect(url_for('routes_bp.login'))
+        except Exception as e:
+            print("User registration failed:", e)
+            flash('Failed to register user', 'error')
+            return redirect(url_for('routes_bp.register'))
+    return render_template('register.html')
 
 @routes_bp.route('/logout')
 @login_required
 def logout():
     logout_user()
-    return redirect('/')
+    flash('Logged out successfully', 'success')
+    return redirect(url_for('routes_bp.index'))
 
 @routes_bp.route('/forums')
 def forums():
@@ -53,26 +56,27 @@ def forums():
 
 @routes_bp.route('/downloads', methods=['GET'])
 def downloads():
-    return render_template(
-        'downloads.html', current_user=current_user, download=Download.query.order_by(Download.created_at).all())
+    downloads = Download.query.order_by(Download.created_at).all()
+    return render_template('downloads.html', current_user=current_user, downloads=downloads)
 
 @routes_bp.route('/create_download', methods=['POST', 'GET'])
+@login_required
 def create_download():
     if request.method == 'POST':
         name = request.form['name']
         description = request.form['description']
         link = request.form['link']
-        created_at = datetime.utcnow()
-        new_download = Download(
-            name=name, description=description, link=link, created_at=created_at)
+        new_download = Download(name=name, description=description, link=link)
         try:
             db.session.add(new_download)
             db.session.commit()
-            return render_template('downloads.html', current_user=current_user, new_download=new_download)
-        except:
-            return 'There was an issue with the upload process'
-    else:
-        return render_template('create_download.html')
+            flash('Download created successfully', 'success')
+            return redirect(url_for('routes_bp.downloads'))
+        except Exception as e:
+            print("Error creating download:", e)
+            flash('Failed to create download', 'error')
+            return redirect(url_for('routes_bp.create_download'))
+    return render_template('create_download.html')
 
 @routes_bp.route('/events')
 def events():
@@ -84,88 +88,81 @@ def squadrons():
     return render_template('squadrons.html', squadrons=squadrons, current_user=current_user)
 
 @routes_bp.route('/squadrons_reg', methods=['POST', 'GET'])
+@login_required
 def squadrons_reg():
     if request.method == 'POST':
-        print("0")
         name = request.form['name']
         description = request.form['description']
-        members_input = request.form['members']
         created_at = request.form['created_at']
         created_at = datetime.strptime(created_at, '%Y-%m-%d').date()
-        members_list = members_input.split(',')
-
-        existing_squadron = Squadrons.query.filter_by(name=name).first()
-        if existing_squadron:
-            return 'A squadron with the same name already exists. Please choose a different name.'
-
-        new_squadron = Squadrons(
-            name=name, description=description, created_at=created_at)
-        members = Users.query.filter(Users.username.in_(members_list)).all()
-        new_squadron.members = members
-
+        new_squadron = Squadrons(name=name, description=description, created_at=created_at)
         try:
             db.session.add(new_squadron)
             db.session.commit()
-            new_squadron.members = members  # Assign the members directly
-            db.session.commit()
+            flash('Squadron registered successfully', 'success')
             return redirect(url_for('routes_bp.squadrons'))
         except Exception as e:
-            db.session.rollback()
-            print("Error:", e)
-            return 'There was an issue with the squadron registration process'
-
+            print("Error registering squadron:", e)
+            flash('Failed to register squadron', 'error')
+            return redirect(url_for('routes_bp.squadrons_reg'))
     else:
         return render_template('squadrons_reg.html')
     
 @routes_bp.route('/admin', methods=['GET'])
+@login_required
 def admin():
-    is_admin = current_user.is_admin
-
-    if not is_admin:
+    if not current_user.is_admin:
         flash("Access denied. You are not an admin.", "error")
         return redirect(url_for('routes_bp.index'))
-
+    
     try:
-        from sqlalchemy.orm import joinedload
-
         all_users = Users.query.filter(Users.username != 'admin').with_entities(
-    Users.id, Users.username, Users.email, Users.password, Users.squadron_id)
-
-        return render_template('admin.html', is_admin=is_admin, all_users=all_users)
+            Users.id, Users.username, Users.email, Users.squadron_id)
+        return render_template('admin.html', all_users=all_users)
     except Exception as e:
+        print("Error in admin:", e)
         flash("An error occurred while retrieving user data.", "error")
         return redirect(url_for('routes_bp.index'))
 
-
 @routes_bp.route('/leave_squadron', methods=['GET'])
+@login_required
 def leave_squadron():
     current_user.squadron = None
     db.session.commit()
-    return redirect('/profile')
+    flash('Left squadron successfully', 'success')
+    return redirect(url_for('routes_bp.profile'))
 
-from flask import render_template, request, redirect, url_for
-
-@routes_bp.route('/join_squadron/<int:squadron_id>', methods=['GET','POST'])
+@routes_bp.route('/join_squadron/<int:squadron_id>', methods=['GET', 'POST'])
+@login_required
 def join_squadron(squadron_id):
-    squadron = Squadrons.query.get(squadron_id)  
-    current_user.squadron = squadron
-    db.session.commit()
-
+    squadron = Squadrons.query.get(squadron_id)
+    if squadron:
+        current_user.squadron = squadron
+        db.session.commit()
+        flash('Joined squadron successfully', 'success')
+    else:
+        flash('Squadron not found', 'error')
     return redirect(url_for('routes_bp.squadrons'))
 
 @routes_bp.route('/delete_squadron/<int:squadron_id>', methods=['GET', 'POST'])
+@login_required
 def delete_squadron(squadron_id):
+    if not current_user.is_admin:
+        flash('Access denied. You are not an admin.', 'error')
+        return redirect(url_for('routes_bp.index'))
+
     squadron = Squadrons.query.get(squadron_id)
     if squadron:
-        if current_user.is_admin:
-            try:
-                db.session.delete(squadron)
-                db.session.commit()
-                flash('Squadron deleted successfully', 'success,refresh page for updates to take place')
-                
-            except Exception as e:
-                db.session.rollback()
+        try:
+            db.session.delete(squadron)
+            db.session.commit()
+            flash('Squadron deleted successfully', 'success')
+        except Exception as e:
+            db.session.rollback()
+            print("Error deleting squadron:", e)
+            flash('Failed to delete squadron', 'error')
     else:
         flash('Squadron not found', 'error')
-
     return redirect(url_for('routes_bp.squadrons'))
+
+
