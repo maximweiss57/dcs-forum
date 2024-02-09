@@ -20,10 +20,7 @@ services:
       - db  
     ports:
       - "5000:5000"
-    environment:
-      SQLALCHEMY_DATABASE_URI: 'mysql://root:root@mysql/dcsforum'
-      SQLALCHEMY_TRACK_MODIFICATIONS: 'False'
-      SECRET_KEY: 'dcs-forum'
+
     volumes:
       - ./app:/app 
 

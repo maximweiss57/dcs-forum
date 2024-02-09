@@ -17,20 +17,19 @@ def create_admin_user(app):
         db.session.commit()
 
 
-def create_app(testing):
+def create_app():
     app = Flask(__name__)
-
     app.config["SECRET_KEY"] = 'dcs-forum'
-    app.config["TESTING"] = testing
     app.config["DEBUG"] = True
-
-    if testing :
-        app.config["SQLALCHEMY_DATABASE_URI"] = 'sqlite:///test-dcsforum.db'
-    else:
-        app.config["SQLALCHEMY_DATABASE_URI"]= 'mysql+mysqlconnector://root:root@db/dcsforum'
-
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+    db_password = "root"
+    db_user = "root"
+    db_name = "dcsforum"
+    db_host = "db"
+    app.config["SQLALCHEMY_DATABASE_URI"]= f"mysql+mysqlconnector://{db_user}:{db_password}@{db_host}/{db_name}"
     
+
     db.init_app(app)
     app.register_blueprint(routes_bp)
     login_manager = LoginManager(app)
