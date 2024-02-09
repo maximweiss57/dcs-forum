@@ -49,64 +49,66 @@ jobs:
             New ${{ github.event_name }}, tests failed.
 
   CD:
-    needs : [test]
+    needs: [test]
     name: build and push
     runs-on: ubuntu-latest
     steps:
-    - name: build and push to ecr 
-      uses: actions/checkout@v3
+      - name: build and push to ecr 
+        uses: actions/checkout@v3
 
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-east-1
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
 
-    - name: Login to Amazon ECR
-      id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v1
-      
-    - name: pip update
-      run: |
-       pip install --upgrade pip
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
 
-    - name: Build, Tag, and Push the Image to Amazon ECR
-      id: build-image
-      env:
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        ECR_REPOSITORY: dcs-forum
-        IMAGE_TAG: latest
-      run: |
-        docker build --no-cache -t dcsforum:$IMAGE_TAG .
-        docker tag dcsforum:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-        docker ps
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+      - name: pip update
+        run: |
+          pip install --upgrade pip
 
-    - name: Send custom message on success
-      if: success()
-      uses: appleboy/telegram-action@master
-      with:
-        to: ${{ secrets.TELEGRAM_CHAT_ID }}
-        token: ${{ secrets.TELEGRAM_TOKEN }}
-        message: |
-          saccesful push to production.
-          
-    - name: Send custom message on failure
-      if: failure()
-      uses: appleboy/telegram-action@master
-      with:
-        to: ${{ secrets.TELEGRAM_CHAT_ID }}
-        token: ${{ secrets.TELEGRAM_TOKEN }}
-        message: |
-          failed push to production.
-      
+      - name: Build, Tag, and Push the Image to Amazon ECR app
+        id: build-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: dcs-forum
+          IMAGE_TAG: app
+        run: |
+          docker build --no-cache -t dcsforum:$IMAGE_TAG . -f Dockerfile-app
+          docker tag dcsforum:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker ps
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
+      - name: Build, Tag, and Push the Image to Amazon ECR db
+        id: build-image-db
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: dcs-forum
+          IMAGE_TAG: app-db
+        run: |
+          docker build --no-cache -t dcsforum:$IMAGE_TAG . -f Dockerfile-db
+          docker tag dcsforum:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker ps
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
-
-
-
-
-
-
-
+      - name: Send custom message on success
+        if: success()
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_CHAT_ID }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: |
+            Successful push to production.
+            
+      - name: Send custom message on failure
+        if: failure()
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_CHAT_ID }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: |
+            Failed push to production.
