@@ -9,6 +9,7 @@ services:
     ports:  
       - "3306:3306"
     environment:
+      DB_HOST: localhost
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: dcsforum
     volumes:
