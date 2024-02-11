@@ -1,2 +1,6 @@
 FROM mysql:latest
 COPY . /dcs-forum-db
+ENV DB_HOST=localhost
+ENV MYSQL_ROOT_PASSWORD=root
+ENV MYSQL_DATABASE=dcsforum
+VOLUME db_data:/var/lib/mysql

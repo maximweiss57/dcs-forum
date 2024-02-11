@@ -30,7 +30,7 @@ def create_app(testing):
         db_password = "root"
         db_user = "root"
         db_name = "dcsforum"
-        db_host = "db"
+        db_host = "localhost"
         app.config["SQLALCHEMY_DATABASE_URI"]= f"mysql+mysqlconnector://{db_user}:{db_password}@{db_host}/{db_name}"
         
 
