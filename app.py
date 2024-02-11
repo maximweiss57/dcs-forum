@@ -1,4 +1,4 @@
-from flask import Flask, Blueprint,url_for
+from flask import Flask, Blueprint
 from flask_login import LoginManager
 from models import Users
 from instance import db

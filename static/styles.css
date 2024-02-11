@@ -25,43 +25,50 @@ nav {
     border-radius: 50%;
 }
 
-
 .nav-links {
     list-style: none;
     display: flex;
-    background-color: #333; /* Background color for the navigation bar */
-    padding: 10px; /* Padding to increase spacing between links */
+    background-color: #333;
+    padding: 10px;
 }
 
 .nav-links li {
     margin-left: 20px;
-    padding: 8px; /* Padding to increase spacing between links */
-    box-shadow: 0 2px 4px rgba(150, 19, 19, 0.1); /* Subtle box shadow for visual separation */
+    padding: 8px;
+    box-shadow: 0 2px 4px rgba(150, 19, 19, 0.1);
 }
 
 .nav-links li a {
     color: #fff;
     text-decoration: none;
     font-size: 16px;
-    font-family: Arial, sans-serif; /* Change the font family for a more modern look */
-    transition: color 0.2s; /* Slightly faster transition for smoother effects */;
+    font-family: Arial, sans-serif;
+    transition: color 0.2s;
 }
 
 .nav-links li a:hover {
     color: #66c0f4;
-    background-color: #444; /* Change the background color on hover to provide visual feedback */
+    background-color: #444;
 }
-#mainpage{
+
+#mainpage {
     font-size: 18px;
     font-weight: bold;
     color: #66c0f4;
 }
-#CreateSquadron{
-    
+
+#CreateSquadron {
     font-size: 24px;
     font-weight: bold;
     color: #66c0f4;
 }
+
+.search-bar {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+}
+
 .search-bar input[type="text"] {
     padding: 5px 10px;
     border: none;
@@ -88,16 +95,14 @@ nav {
     margin-left: 10px;
 }
 
-
 #about-us {
     margin-left: 25%;
     max-width: 50%;
     text-align: center;
     padding: 20px;
     background-color: #ffffffc0;
-    border-bottom-right-radius:15px ;
+    border-bottom-right-radius: 15px;
     border-bottom-left-radius: 15px;
-    
 }
 
 #about-us h2 {
@@ -125,162 +130,10 @@ nav {
     .logo {
         flex: 1 0 100%;
         margin-bottom: 10px;
-    
     }
 
     .nav-links {
         flex: 1 0 100%;
-        justify-content: space-around;
-    }
-
-    .search-bar {
-        flex: 1 0 100%;
-        margin-bottom: 10px;
-    }
-
-    .user-actions {
-        flex: 1 0 100%;
-        justify-content: center;
-    }
-
-    .user-actions button {
-        margin-left: 0;
-        margin-right: 10px;
-    }
-}
-#login {
-    text-align: center;
-}
-#register {
-    font-size: 24px;
-    font-weight: bold;
-    text-align: center;
-}
-
-.input-field {
-    width: 250px;
-    height: 40px;
-        display: flex;
-        align-items: center;
-
-    
-}
-
-.login-button {
-    background-color: #66c0f4;
-    color: #fff;
-    border-radius: 5px;
-    padding: 10px 15px;
-    font-size: 18px;
-    font-weight: bold;
-}
-#login .input-field {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-}
-
-
-
-#login .input-field:nth-child(1) {
-    margin-bottom: 10px;
-}
-
-.form{
-    width: 500px;
-    margin: 0 auto;
-    border: 2px solid black;
-    padding:8px;
-    border-radius: 12px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap:  18px;
-    display: flex;
-    align-items: center;
-    background-color: #ffffff50;
-
-}
-
-.background-image {
-    background-image: url(../static/back1);
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-size: cover;
-    backdrop-filter: blur(5px);
-}
-
-/* Styling for Create Squadron Page */
-
-.page-content {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #f7f7f7;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
-    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-h1 {
-    font-size: 24px;
-    margin-bottom: 20px;
-}
-
-form {
-    display: grid;
-    gap: 15px;
-}
-
-label {
-    font-weight: bold;
-}
-
-input[type="number"],
-input[type="date"],
-textarea {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 14px;
-}
-
-textarea {
-    resize: vertical;
-}
-
-button[type="submit"] {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 20px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.2s;
-}
-
-button[type="submit"]:hover {
-    background-color: #0056b3;
-}
-
-/* Style for form fields when they are required but not filled */
-input:required:invalid,
-textarea:required:invalid {
-    border-color: #ff7777;
-}
-
-/* Placeholder color for input fields */
-input::placeholder,
-textarea::placeholder {
-    color: #999;
-}
-
-/* Responsive adjustments */
-@media (max-width: 600px) {
-    .page-content {
-        padding: 15px;
+        justify-content: space-arou
     }
 }

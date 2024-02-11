@@ -1,8 +1,7 @@
 __pycache__/
 vscode/
 .venv/
-instance/__pycache__
-instance/*.db
+instance/
 .vscode/
 .pytest_cache/
 scripts.js

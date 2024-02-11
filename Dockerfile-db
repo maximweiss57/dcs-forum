@@ -1,5 +1,2 @@
 FROM mysql:latest
-ENV MYSQL_ROOT_PASSWORD=root
-ENV MYSQL_DATABASE=dcsforum
-EXPOSE 3306
 COPY . /dcs-forum-db
