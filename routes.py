@@ -95,18 +95,39 @@ def squadrons_reg():
         description = request.form['description']
         created_at = request.form['created_at']
         created_at = datetime.strptime(created_at, '%Y-%m-%d').date()
+        
+        member_names = request.form.getlist('members')
+        
+        member_ids = []
+        for member_name in member_names:
+            user = Users.query.filter_by(username=member_name).first()
+            if user:
+                member_ids.append(user.id)
+        
         new_squadron = Squadrons(name=name, description=description, created_at=created_at)
+
         try:
             db.session.add(new_squadron)
             db.session.commit()
+            
+            for member_id in member_ids:
+                user = Users.query.get(member_id)
+                if user:
+                    user.squadron_id = new_squadron.id
+                    db.session.commit()
+            
             flash('Squadron registered successfully', 'success')
             return redirect(url_for('routes_bp.squadrons'))
         except Exception as e:
-            print("Error registering squadron:", e)
             flash('Failed to register squadron', 'error')
             return redirect(url_for('routes_bp.squadrons_reg'))
     else:
         return render_template('squadrons_reg.html')
+    
+@routes_bp.route('/profile', methods=['GET'])
+@login_required
+def profile():
+    return render_template('profile.html', current_user=current_user)
     
 @routes_bp.route('/admin', methods=['GET'])
 @login_required
@@ -164,5 +185,17 @@ def delete_squadron(squadron_id):
     else:
         flash('Squadron not found', 'error')
     return redirect(url_for('routes_bp.squadrons'))
+
+@routes_bp.route('/search_results', methods=['GET'])
+def search_results():
+    query = request.args.get('query')
+    if not query:
+        return render_template('search_results.html', users_results=None, squadrons_results=None, query=None)
+
+    users_results = Users.query.filter(Users.username.ilike(f'%{query}%')).all()
+
+    squadrons_results = Squadrons.query.filter(Squadrons.name.ilike(f'%{query}%')).all()
+
+    return render_template('search_results.html', users_results=users_results, squadrons_results=squadrons_results, query=query)
 
 
