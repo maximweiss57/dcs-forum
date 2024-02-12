@@ -3,14 +3,22 @@
 {% block title %}PreFlight Register{% endblock %}
 
 {% block content %}
-<section id="register" class="container">
-    <h2">Register</h2>
+<section id="about-us" class="col-md-6">
+    <h2>Register</h2>
     <form class="form" action="/register" method="post">
-        <input type="text" name="username" class="input-field" placeholder="Username" style="display: flex; align-items: center;">
-        <input type="email" name="email" class="input-field" placeholder="Email" style="display: flex; align-items: center;">
-        <input type="password" name="password" class="input-field" placeholder="Password" style="display: flex; align-items: center;">
-        <input type="password" name="confirm_password" class="input-field" placeholder="Confirm Password" style="display: flex; align-items: center;">
-        <input type="submit" value="Register" class="login-button">
+        <div class="input-group">
+            <input type="text" name="username" class="input-field" placeholder="Username">
+        </div>
+        <div class="input-group">
+            <input type="email" name="email" class="input-field" placeholder="Email">
+        </div>
+        <div class="input-group">
+            <input type="password" name="password" class="input-field" placeholder="Password">
+        </div>
+        <div class="input-group">
+            <input type="password" name="confirm_password" class="input-field" placeholder="Confirm Password">
+        </div>
+        <button type="submit" class="login-button">Register</button>
     </form>
 </section>
 {% endblock %}

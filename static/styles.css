@@ -134,6 +134,27 @@ nav {
 
     .nav-links {
         flex: 1 0 100%;
-        justify-content: space-arou
+        justify-content: space-around;
     }
+}
+
+/* Additional styling for login and register pages */
+.form {
+    width: 100%;
+}
+
+.input-field {
+    width: 30%;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.login-button {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 20px;
+    background-color: #66c0f4;
+    color: #fff;
+    cursor: pointer;
+    margin-top: 10px;
 }
