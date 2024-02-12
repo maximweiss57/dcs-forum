@@ -2,4 +2,10 @@ FROM python:slim
 COPY . /dcs-forum
 WORKDIR /dcs-forum
 RUN pip install -r requirements.txt
+EXPOSE 5000
+#ENV MYSQL_USER: HixS
+#ENV MYSQL_HOST: forum-db
+#ENV MYSQL_PASSWORD: root
+ENV MYSQL_DATABASE: db
+ENV MYSQL_ROOT_PASSWORD: root
 CMD ["python", "run.py"]

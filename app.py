@@ -26,13 +26,8 @@ def create_app(testing):
         app.config["SECRET_KEY"] = 'dcs-forum'
         app.config["DEBUG"] = True
         app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+        app.config["SQLALCHEMY_DATABASE_URI"] = 'mysql+mysqlconnector://root:root@mysql/db'
 
-        db_password = "root"
-        db_user = "root"
-        db_name = "dcsforum"
-        db_host = "localhost"
-        app.config["SQLALCHEMY_DATABASE_URI"]= f"mysql+mysqlconnector://{db_user}:{db_password}@{db_host}/{db_name}"
-        
 
     db.init_app(app)
     app.register_blueprint(routes_bp)

@@ -1,6 +1,6 @@
-version: 'version: "3.7"'
+version: "3.7"
 services:
-  db:
+  mysql:
     build: 
       context: .
       dockerfile: Dockerfile-db
@@ -9,9 +9,11 @@ services:
     ports:  
       - "3306:3306"
     environment:
-      DB_HOST: localhost
+      #MYSQL_USER: HixS
+      #MYSQL_HOST: forum-db
+      #MYSQL_PASSWORD: root
+      MYSQL_DATABASE: db
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: dcsforum
     volumes:
       - db_data:/var/lib/mysql  
 
@@ -22,10 +24,11 @@ services:
     container_name: dcs-forum
     restart: always
     depends_on:
-      - db  
+      - mysql
     ports:
       - "5000:5000"
-
+    environment:
+      DATABASE_URL: mysql://root:root@mysql/db
     volumes:
       - ./app:/app 
 
