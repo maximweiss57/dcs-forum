@@ -4,5 +4,4 @@ vscode/
 instance/
 .vscode/
 .pytest_cache/
-scripts.js
 ```
