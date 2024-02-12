@@ -1,8 +1,8 @@
-FROM mysql:latest
-COPY . /dcs-forum-db
-#ENV MYSQL_USER: HixS
-#ENV MYSQL_HOST: forum-db
-#ENV MYSQL_PASSWORD: root
-ENV MYSQL_DATABASE: db
-ENV MYSQL_ROOT_PASSWORD: root
-EXPOSE 3306
+FROM postgres
+COPY ./sql /docker-entrypoint-initdb.d
+EXPOSE 5432
+ENV POSTGRES_USER=postgres
+ENV POSTGRES_PASSWORD=root
+ENV POSTGRES_DB=forum
+HEALTHCHECK --interval=10s --timeout=10s --retries=10 --start-period=10s \
+    CMD pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB} -t 1

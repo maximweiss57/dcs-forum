@@ -3,6 +3,7 @@ from flask_login import LoginManager
 from models import Users
 from instance import db
 from routes import routes_bp
+import os
 
 def create_admin_user(app):
     admin_username = "admin"
@@ -26,8 +27,14 @@ def create_app(testing):
         app.config["SECRET_KEY"] = 'dcs-forum'
         app.config["DEBUG"] = True
         app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-        app.config["SQLALCHEMY_DATABASE_URI"] = 'mysql+mysqlconnector://root:root@mysql/db'
 
+        POSTGRES_USER= "postgres"
+        POSTGRES_PASSWORD= "root"
+        POSTGRES_HOST = "db"
+        POSTGRES_DB= "forum"
+        db_port = "5432"
+        db_uri = f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{db_port}/{POSTGRES_DB}"
+        app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
 
     db.init_app(app)
     app.register_blueprint(routes_bp)
